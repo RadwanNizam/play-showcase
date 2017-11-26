@@ -5,4 +5,6 @@
 This example exposes a REST web service API to access the stored Event objects.
 
 The project uses Play JPA to read the events from a Postgresql DB.
+
+The file events.json is an example of the REST web service call.
    
