@@ -14,6 +14,7 @@ import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.EventService;
 
 /**
  * The controller keeps all database operations behind the repository, and uses
@@ -24,18 +25,19 @@ import play.mvc.Result;
 public class EventsController extends Controller {
 
     private final FormFactory formFactory;
-    private final EventRepository eventRepository;
     private final HttpExecutionContext ec;
-
+    
     @Inject
-    public EventsController(FormFactory formFactory, EventRepository personRepository, HttpExecutionContext ec) {
+    private EventService eventsService;
+    
+    @Inject
+    public EventsController(FormFactory formFactory, HttpExecutionContext ec) {
         this.formFactory = formFactory;
-        this.eventRepository = personRepository;
         this.ec = ec;
     }
 
     public CompletionStage<Result> getEvents() {
-        return eventRepository.list().thenApplyAsync(personStream -> {
+    	return eventsService.getEvents().thenApplyAsync(personStream -> {
             return ok(toJson(personStream.collect(Collectors.toList())));
         }, ec.current());
     }
